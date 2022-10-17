@@ -1,0 +1,31 @@
+# Replace {{NAMESPACE}} with the actual arcdata namespace below
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{NAMESPACE}}:cr-extension-identity
+rules:
+- apiGroups:
+  - clusterconfig.azure.com
+  resources:
+  - azureextensionidentities
+  verbs:
+  - create
+  - get
+  - list
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{NAMESPACE}}:crb-extension-identity
+  namespace: azure-arc
+subjects:
+- kind: ServiceAccount
+  name: sa-arcdata-deployer
+  namespace: {{NAMESPACE}}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{NAMESPACE}}:cr-extension-identity
